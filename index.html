@@ -1,0 +1,56 @@
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <title>AR Video AutoPlay</title>
+  <!-- Librairies -->
+  <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+</head>
+<body>
+  <a-scene
+    mindar-image="imageTargetSrc: targets.mind; maxTrack: 1;"
+    color-space="sRGB"
+    renderer="colorManagement: true, physicallyCorrectLights"
+    device-orientation-permission-ui="enabled: false"
+    vr-mode-ui="enabled: false"
+    id="scene"
+  >
+    <a-assets>
+      <!-- 🎥 Vidéo muette et en autoplay -->
+      <video 
+        id="video1" 
+        src="annimation.mp4" 
+        preload="auto" 
+        loop 
+        autoplay 
+        muted 
+        playsinline 
+        webkit-playsinline 
+        crossorigin="anonymous">
+      </video>
+    </a-assets>
+    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+    <a-entity mindar-image-target="targetIndex: 0">
+      <a-video 
+        src="#video1" 
+        width="1" 
+        height="0.56"
+        position="0 0 0.5"
+        rotation="0 0 0"
+        id="video-plane">
+      </a-video>
+    </a-entity>
+  </a-scene>
+  <script>
+    const sceneEl = document.querySelector("a-scene");
+    const videoEl = document.querySelector("#video1");
+    sceneEl.addEventListener("targetFound", () => {
+      console.log("🔍 Image trouvée !");
+      videoEl.play();
+    });
+    sceneEl.addEventListener("targetLost", () => {
+      console.log("❌ Image perdue !");
+      videoEl.pause();
+    });
+  </script>
+</body>
